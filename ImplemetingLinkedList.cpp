@@ -1,70 +1,86 @@
 #include<iostream>
 #include<bits/stdc++.h>
 using namespace std;
+
 class Node{
     public:
     int data;
     Node* next;
 
+    //constructor
     Node(int data){
-    this -> data = data;
-    this -> next = NULL;
-
+        this -> data = data;
+        this -> next = NULL;
     }
 };
 
-//insert at head
 void InsertAtFirst(Node* &head, int d){
     Node* temp = new Node(d);
     temp -> next = head;
     head = temp;
 }
-
-//insert at tail
-void InsertAtLast(Node* &tail, int d){
+void InsertAtTail(Node* &tail,Node* &head, int d){
     Node* temp = new Node(d);
-    tail -> next = temp;
-    tail = temp;
-
+    if (head == NULL) {
+        head = temp;
+        tail = temp;
+    } else {
+        tail->next = temp;
+        tail = temp;
+    }
 }
-
-//insert at any position
-void InsertAtPosition(Node* &head ,int d, int n){
-
-    if(n == 1){
+void InsertAtAnyPosition(Node* &head, int n, int d){
+    if(n ==1){
         InsertAtFirst(head, d);
         return;
     }
     Node* temp = head;
     int cnt =1;
-    while( cnt < n-1){
+    while( cnt < n-1 ){
         temp = temp -> next;
         cnt++;
     }
-
-    //creating a node for d
     Node* NodeToInsert = new Node(d); 
     NodeToInsert -> next = temp -> next;
     temp -> next = NodeToInsert;
-
 }
+
+void reverseLL(Node* &head, Node* &tail){
+    Node* prev = NULL;
+    Node* curr = head;
+    Node* forward = NULL;
+    while(curr != NULL){
+        forward = curr -> next;
+        curr -> next = prev;
+        prev = curr;
+        curr = forward;
+    }
+    tail = head;
+    head = prev;
+}
+
 void printLL(Node* &head){
     Node* temp = head;
     while(temp != NULL){
-    cout<< temp -> data << " ";
-    temp = temp -> next;
+        cout<< temp -> data<<" ";
+        temp = temp -> next;
     }
+
 }
 int main()
-{ 
-    //created a new node
-    Node* node1 =  new Node(10);
-    //point head to the new node 
-    Node* head = node1;
-    Node* tail = node1;
-    InsertAtLast(tail, 12);
-    InsertAtLast(tail, 15);
-    InsertAtPosition(head, 13, 3);
+{
+    Node* n1 = new Node(20);
+    Node* head = n1;
+    Node* tail = n1;
+    InsertAtTail(tail,head, 40);
+    InsertAtFirst(head, 10);
+    InsertAtAnyPosition(head,3,30);
+    printLL(head);
+    cout<<endl;
+    reverseLL(head,tail);
     printLL(head);
 return 0;
 }
+
+//output : 10 20 30 40
+//         40 30 20 10
